@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/style.css">
+    <script defer src="js/interactivity.js"></script>
+    <script defer src="js/script.js"></script>
+    <title>Chat</title>
+</head>
+<body>
+    <div class="viewport">
+        <div class="container">
+            <div class="chat">
+                <div class="left">
+                    <div class="title">Чаты</div>
+                    <div class="dialogues-wrapper">
+
+                        <div class="dialogue">
+                            <input type="hidden" value="all">
+                            <div class="img-wrapper"></div>
+                            <div class="info">
+                                <div class="name">Общий</div>
+                                <div class="message">Последнее сообщение</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div> <!-- chat left -->
+
+                <div class="right">
+                    <div class="top">
+                        <div class="title">Общий</div>
+                    </div>
+
+                    <div class="messages-wrapper" id="messages-wrapper">
+                        <div class="message">
+                            <input type="hidden" value="1">
+                            <div class="item img-wrapper"></div>
+                            <div class="item text-wrapper">
+                                <div class="text">
+                                    Здраствуйте чем могу помочь
+                                </div>
+                            </div>
+                            <div class="item time">09.04.2023 15:05</div>
+                        </div>
+
+                        <div class="message">
+                            <input type="hidden" value="2">
+                            <div class="item img-wrapper"></div>
+                            <div class="item text-wrapper">
+                                <div class="text">
+                                    Здраствуйте чем могу помочь
+                                </div>
+                            </div>
+                            <div class="item time">09.04.2023 15:05</div>
+                        </div>
+
+
+                        <div class="message same-user">
+                            <input type="hidden" value="2">
+                            <div class="item text-wrapper">
+                                <div class="text">
+                                    Здраствуйте чем могу помочь
+                                </div>
+                            </div>
+                            <div class="item time">09.04.2023 15:05</div>
+                        </div>
+
+                        <div class="message">
+                            <input type="hidden" value="1"> <!-- здесь будет id пользователя -->
+                            <div class="item img-wrapper"></div>
+                            <div class="item text-wrapper">
+                                <div class="text">
+                                    Здраствуйте чем могу помочь
+                                </div>
+                            </div>
+                            <div class="item time">09.04.2023 15:05</div>
+                        </div>
+
+                    </div> <!-- message-wrapper -->
+
+                    <div class="pen">
+                        <textarea
+                                name="input-message"
+                                id="input-message"
+                                placeholder="Введите сообщение..."
+                                style="height: 20px"></textarea>
+                    </div>
+                </div> <!-- chat right -->
+            </div> <!-- chat -->
+        </div>
+    </div>
+</body>
+</html>
