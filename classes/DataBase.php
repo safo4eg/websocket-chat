@@ -22,16 +22,18 @@ class DataBase {
         for($user = []; $row = mysqli_fetch_assoc($result); $user[] = $row);
 
         if(empty($user)) {
-            return $isErrors['errors']['username'] = 'Неверная пара - username:password';
+            $isErrors['errors']['username'] = 'Неверная пара - username:password';
+            return $isErrors;
         }
 
         $isPassword = password_verify($password, $user[0]['password']);
         if(!$isPassword) {
-            return $isErrors['errors']['username'] = 'Неверная пара - username:password';
+            $isErrors['errors']['username'] = 'Неверная пара - username:password';
+            return $isErrors;
         }
 
         return ['status' => 'ok', 'user' => [
-            'id' => $user[0]['password'],
+            'id' => $user[0]['id'],
             'username' => $user[0]['username'],
             'status_id' => $user[0]['status_id']
         ]
