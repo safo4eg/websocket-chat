@@ -74,7 +74,7 @@ class WebSocket {
             $maskedPartLength = strlen($maskedPart);
 
             if($maskedPartLength < 32) $bufferMaskKey = substr($maskKeyBits, 0, $maskedPartLength);
-            $unmaskedBody .= self::fromBitsStrToSymbols($maskedPart, $maskedPartLength) ^ fromBitsStrToSymbols($bufferMaskKey, $maskedPartLength);
+            $unmaskedBody .= self::fromBitsStrToSymbols($maskedPart, $maskedPartLength) ^ self::fromBitsStrToSymbols($bufferMaskKey, $maskedPartLength);
             $i++;
         }
 

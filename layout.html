@@ -34,48 +34,9 @@
 
                     <div class="messages-wrapper" id="messages-wrapper">
                         <div class="message">
-                            <input type="hidden" value="1">
-                            <div class="item img-wrapper"></div>
-                            <div class="item text-wrapper">
-                                <div class="text">
-                                    Здраствуйте чем могу помочь
-                                </div>
-                            </div>
-                            <div class="item time">09.04.2023 15:05</div>
+                            <input type="hidden" value="0"> <!-- уникальный ид который не будет ни у какого пользователя -->
                         </div>
 
-                        <div class="message">
-                            <input type="hidden" value="2">
-                            <div class="item img-wrapper"></div>
-                            <div class="item text-wrapper">
-                                <div class="text">
-                                    Здраствуйте чем могу помочь
-                                </div>
-                            </div>
-                            <div class="item time">09.04.2023 15:05</div>
-                        </div>
-
-
-                        <div class="message same-user">
-                            <input type="hidden" value="2">
-                            <div class="item text-wrapper">
-                                <div class="text">
-                                    Здраствуйте чем могу помочь
-                                </div>
-                            </div>
-                            <div class="item time">09.04.2023 15:05</div>
-                        </div>
-
-                        <div class="message">
-                            <input type="hidden" value="1"> <!-- здесь будет id пользователя -->
-                            <div class="item img-wrapper"></div>
-                            <div class="item text-wrapper">
-                                <div class="text">
-                                    Здраствуйте чем могу помочь
-                                </div>
-                            </div>
-                            <div class="item time">09.04.2023 15:05</div>
-                        </div>
 
                     </div> <!-- message-wrapper -->
 
@@ -89,6 +50,21 @@
                 </div> <!-- chat right -->
             </div> <!-- chat -->
         </div>
+
+        <div class="modal">
+            <div class="modal-content">
+                <div class="title">Для доступа к чату нужно авторизироваться</div>
+                <div class="tabs">
+                    <button id="login-tab" class="active">Вход</button>
+                    <button id="register-tab" type="button">Регистрация</button>
+                </div>
+                <form id="auth-form" action="/">
+                    <input type="text" placeholder="username">
+                    <input type="text" placeholder="password">
+                    <button id="auth-btn" type="button">Войти</button>
+                </form>
+            </div>
+        </div> <!-- modal -->
     </div>
 </body>
 </html>

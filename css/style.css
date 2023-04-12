@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+.active {
+    color: #ee4b10;
+}
+
 .viewport {
     height: 100vh;
     width: 100%;
@@ -103,7 +107,7 @@
     display: flex;
 }
 
-.chat .right .message:nth-child(n + 2) {
+.chat .right .message:nth-child(n + 3) {
     margin-top: 20px;
 }
 
@@ -161,4 +165,91 @@
 
 .chat .right .pen #input-message:focus {
     outline: none;
+}
+
+/* MODAL */
+
+.modal {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.7);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    max-width: 400px;
+    width: 100%;
+    background: #f9f9f9;
+    padding: 20px 25px;
+    border-radius: 5px;
+}
+
+.modal-content .title {
+    font-size: 18px;
+    text-align: center;
+}
+
+.modal-content .tabs {
+    width: 100%;
+    margin-top: 50px;
+    text-align: center;
+}
+
+.modal-content .tabs button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    transition: all 0.2s linear;
+}
+
+.modal-content .tabs button:hover {
+    cursor: pointer;
+    color: #ee4b10;
+}
+
+.modal-content .tabs button:nth-child(n + 2) {
+    margin-left: 10px;
+}
+
+.modal-content #auth-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.modal-content #auth-form input {
+    width: 70%;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 2px solid gray;
+    border-radius: 20px;
+}
+
+.modal-content #auth-form input:nth-child(n + 2) {
+    margin-top: 10px;
+}
+
+.modal-content #auth-form input:focus {
+    outline: 1px solid black;
+    border: 2px solid black;
+}
+
+.modal-content #auth-form #auth-btn {
+    width: 70%;
+    margin-top: 20px;
+    padding: 10px 15px;
+    font-size: 16px;
+}
+
+.modal-content #auth-form #auth-btn:hover {
+    cursor: pointer;
 }

@@ -53,6 +53,41 @@
     }
 
 
+    interactivityModule.createAuthForm = function(action, form) {
+        deleteFormItems(form);
+        let username = document.createElement('INPUT');
+        username.placeholder = 'username';
+        let password = document.createElement('INPUT');
+        password.placeholder = 'password';
+        password.type = 'password';
+        let btn = document.createElement('BUTTON');
+        btn.id = 'auth-btn';
+        btn.type = 'button';
+        btn.textContent = 'Войти';
+
+        form.append(username);
+        form.append(password);
+
+        if(action === 'register') {
+            let confirm = document.createElement('INPUT');
+            confirm.placeholder = 'confirm password';
+            confirm.type = 'password';
+            form.append(confirm);
+            btn.textContent = 'Зарегистрироваться';
+        }
+
+        form.append(btn);
+    }
+
+     function deleteFormItems(form) {
+        let formChildren = Array.from(form.children);
+        if(formChildren.length !== 0) {
+            for(let item of formChildren) {
+                form.removeChild(item);
+            }
+        }
+    }
+
     function convertTime(timestamp) {
         function addZero(num) {
             if(num >= 0 && num <= 9) return '0' + num;

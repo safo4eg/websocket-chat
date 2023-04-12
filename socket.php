@@ -32,11 +32,10 @@ while (true) {
                 $headers = socket_read($connection, 1024);
                 $responseHeader = WebSocket::createResponseHeaders($headers);
                 socket_write($connection, $responseHeader);
-                socket_write($connection, WebSocket::encode('Server: Hello! Welcome to my Socket-Server'));
 
-                foreach ($connections as $c) {
-                    socket_write($c, WebSocket::encode('New user in our chat!'));
-                }
+//                foreach ($connections as $c) {
+//                    socket_write($c, WebSocket::encode('New user in our chat!'));
+//                }
 
                 $connections[] = $connection;
             }
