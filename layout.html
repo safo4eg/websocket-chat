@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/style.css">
-    <script defer src="js/interactivity.js"></script>
+    <script defer src="js/modules/connection.js"></script>
+    <script defer src="js/modules/interactivity.js"></script>
     <script defer src="js/script.js"></script>
     <title>Chat</title>
 </head>
@@ -59,9 +60,10 @@
                     <button id="register-tab" type="button">Регистрация</button>
                 </div>
                 <form id="auth-form" action="/">
-                    <input type="text" placeholder="username">
-                    <input type="text" placeholder="password">
-                    <button id="auth-btn" type="button">Войти</button>
+                    <input type="text" name="username" placeholder="username">
+                    <input type="text" name="password" placeholder="password">
+                    <input id="auth-action" name="action" type="hidden" value="login">
+                    <button id="auth-btn" type="submit">Войти</button>
                 </form>
             </div>
         </div> <!-- modal -->

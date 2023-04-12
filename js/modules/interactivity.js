@@ -55,35 +55,42 @@
 
     interactivityModule.createAuthForm = function(action, form) {
         deleteFormItems(form);
+        let actionInput = document.createElement('INPUT');
+        actionInput.id = 'auth-action';
+        actionInput.type = 'hidden';
+        actionInput.value = 'login';
+        actionInput.name = 'action';
         let username = document.createElement('INPUT');
         username.placeholder = 'username';
+        username.name = 'username';
         let password = document.createElement('INPUT');
         password.placeholder = 'password';
         password.type = 'password';
-        let btn = document.createElement('BUTTON');
-        btn.id = 'auth-btn';
-        btn.type = 'button';
-        btn.textContent = 'Войти';
+        password.name = 'password';
 
-        form.append(username);
-        form.append(password);
+        let btn = form.querySelector('#auth-btn');
+        btn.textContent = 'Вход';
 
         if(action === 'register') {
             let confirm = document.createElement('INPUT');
             confirm.placeholder = 'confirm password';
             confirm.type = 'password';
-            form.append(confirm);
-            btn.textContent = 'Зарегистрироваться';
+            confirm.name = 'confirm';
+            form.prepend(confirm);
+            actionInput.value = 'register';
+            btn.textContent = 'Регистрация';
         }
 
-        form.append(btn);
+        form.prepend(password);
+        form.prepend(username);
+        form.prepend(actionInput);
     }
 
      function deleteFormItems(form) {
         let formChildren = Array.from(form.children);
         if(formChildren.length !== 0) {
             for(let item of formChildren) {
-                form.removeChild(item);
+                if(item.id !== 'auth-btn') form.removeChild(item);
             }
         }
     }
@@ -106,5 +113,5 @@
         return `${day}.${month}.${year} ${hours}:${minutes}`;
     }
 
-    window.interactivity = interactivityModule;
+    window.interactivityModule = interactivityModule;
 })();
