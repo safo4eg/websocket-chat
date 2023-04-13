@@ -27,6 +27,8 @@
 
             $_SESSION['auth']['user'] = $isSuccess['user'];
             echo json_encode($isSuccess['user'], JSON_UNESCAPED_UNICODE);
+        } else if($_POST['action'] === 'register') {
+
         }
     }
 
