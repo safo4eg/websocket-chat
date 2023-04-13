@@ -1,8 +1,16 @@
 let modal = document.getElementById('modal');
-if(!connectionModule.getData('user')) { modal.classList.remove('hide') }
-
+let chat = document.getElementById('chat');
 let inputMessage = document.getElementById('input-message');
 let messagesWrapper = document.getElementById('messages-wrapper');
+
+if(!connectionModule.getData('user')) {
+    modal.classList.remove('hide');
+    chat.classList.add('hide');
+} else {
+    connectionModule.startWebsocket('ws://127.0.0.1:4545', inputMessage);
+}
+
+/* INTERACTIVITY TEXTAREA */
 inputMessage.addEventListener('input', interactivityModule.textareaChanges);
 
 
@@ -39,6 +47,9 @@ if(document.getElementById('modal') !== null) {
                 if(response.status === 200) {
                     connectionModule.saveData('user', data);
                     modal.classList.add('hide');
+                    chat.classList.remove('hide');
+                    connectionModule.startWebsocket('ws://127.0.0.1:4545', inputMessage);
+                    // коннектимся
                 } else if(response.status >= 400) {
                     console.log(JSON.parse(data)); // вывод ошибок для форм
                 }
@@ -46,31 +57,3 @@ if(document.getElementById('modal') !== null) {
         });
     });
 }
-
-/* WORK WEBSOCKET */
-let socket = new WebSocket("ws://127.0.0.1:4545");
-
-/* ОТПРАВКА СООБЩЕНИЯ ПО НАЖАТИЮ НА ENTER в TEXTAREA */
-inputMessage.addEventListener('keypress', function(event) {
-    if(event.code === 'Enter') {
-        let message = this.value;
-        if(message !== '') {
-            socket.send(message);
-            this.value = '';
-        }
-    }
-});
-
-/*ОБРАБОТКА СОБЫТИЙ НА ОТКРЫТИЕ СОЕДИНЕНИЯ, ОШИБОК, ПОЛУЧЕНИЯ СООБЩЕНИЙ*/
-socket.onopen = function(event) {
-    console.log('Соединение установлено');
-};
-
-socket.onerror = function(event) {
-    console.log('ошибочка');
-}
-
-socket.onmessage = function(event) {
-    let message = event.data;
-    interactivityModule.createMessage(messagesWrapper, 2, message, (new Date()).getTime());
-};
