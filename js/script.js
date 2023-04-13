@@ -1,3 +1,6 @@
+let modal = document.getElementById('modal');
+if(!connectionModule.getData('user')) { modal.classList.remove('hide') }
+
 let inputMessage = document.getElementById('input-message');
 let messagesWrapper = document.getElementById('messages-wrapper');
 inputMessage.addEventListener('input', interactivityModule.textareaChanges);
@@ -34,37 +37,40 @@ if(document.getElementById('modal') !== null) {
         connectionModule.sendAuth(formData, 'handlers/auth.php').then(response => {
             response.text().then(data => {
                 if(response.status === 200) {
-                    console.log(JSON.parse(data));
+                    connectionModule.saveData('user', data);
+                    modal.classList.add('hide');
                 } else if(response.status >= 400) {
-                    console.log(JSON.parse(data));
+                    console.log(JSON.parse(data)); // вывод ошибок для форм
                 }
             })
         });
     });
 }
 
-// inputMessage.addEventListener('keypress', function(event) {
-//     if(event.code === 'Enter') {
-//         let message = this.value;
-//         if(message !== '') {
-//             socket.send(message);
-//             this.value = '';
-//         }
-//     }
-// });
+/* WORK WEBSOCKET */
+let socket = new WebSocket("ws://127.0.0.1:4545");
 
+/* ОТПРАВКА СООБЩЕНИЯ ПО НАЖАТИЮ НА ENTER в TEXTAREA */
+inputMessage.addEventListener('keypress', function(event) {
+    if(event.code === 'Enter') {
+        let message = this.value;
+        if(message !== '') {
+            socket.send(message);
+            this.value = '';
+        }
+    }
+});
 
-// let socket = new WebSocket("ws://127.0.0.1:4545");
-//
-// socket.onopen = function(event) {
-//     console.log('Соединение установлено');
-// };
-//
-// socket.onerror = function(event) {
-//     console.log('ошибочка');
-// }
-//
-// socket.onmessage = function(event) {
-//     let message = event.data;
-//     interactivityModule.createMessage(messagesWrapper, 2, message, (new Date()).getTime());
-// };
+/*ОБРАБОТКА СОБЫТИЙ НА ОТКРЫТИЕ СОЕДИНЕНИЯ, ОШИБОК, ПОЛУЧЕНИЯ СООБЩЕНИЙ*/
+socket.onopen = function(event) {
+    console.log('Соединение установлено');
+};
+
+socket.onerror = function(event) {
+    console.log('ошибочка');
+}
+
+socket.onmessage = function(event) {
+    let message = event.data;
+    interactivityModule.createMessage(messagesWrapper, 2, message, (new Date()).getTime());
+};

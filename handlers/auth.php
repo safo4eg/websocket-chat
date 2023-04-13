@@ -14,7 +14,6 @@
         }
 
         if($_POST['action'] === 'login') {
-            setcookie('str', '', time());
             $username = $_POST['username'];
             $password = $_POST['password'];
             $isSuccess = $db->loginUser($username, $password);
@@ -26,12 +25,21 @@
                 die();
             }
 
-            $_SESSION['auth']['user'] = $isSuccess['user'];
-            echo json_encode($isSuccess['user'], JSON_UNESCAPED_UNICODE);
+            echo json_encode($isSuccess['user'], JSON_UNESCAPED_UNICODE); die();
         } else if($_POST['action'] === 'register') {
-            setcookie('str', 'eee', time() + 60*60*24);
-            echo json_encode('$response', JSON_UNESCAPED_UNICODE);
-            die();
+            $username = $_POST['username'];
+            $password = $_POST['password'];
+            $confirm = $_POST['confirm'];
+            $isSuccess = $db->registerUser($username, $password, $confirm);
+
+            if($isSuccess['status'] === 'error') {
+                http_response_code(400);
+                $response['errors'] = $isSuccess['errors'];
+                echo json_encode($response, JSON_UNESCAPED_UNICODE);
+                die();
+            }
+
+            echo json_encode($isSuccess['user'], JSON_UNESCAPED_UNICODE); die();
         }
     }
 

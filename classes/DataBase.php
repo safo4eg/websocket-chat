@@ -1,4 +1,5 @@
 <?php
+require_once('Hasher.php');
 
 class DataBase {
     private $link = null;
@@ -32,11 +33,14 @@ class DataBase {
             return $isErrors;
         }
 
+        $userHash = $this->setHash($user[0]['id']);
+
         return ['status' => 'ok', 'user' => [
             'id' => $user[0]['id'],
             'username' => $user[0]['username'],
-            'status_id' => $user[0]['status_id']
-        ]
+            'status_id' => $user[0]['status_id'],
+            'userHash' => $userHash
+            ]
         ];
     }
 
@@ -76,11 +80,25 @@ class DataBase {
             $isErrors['errors']['mysqli'] = mysqli_error($this->link);
         }
         for($user = []; $row = mysqli_fetch_assoc($result); $user[] = $row);
+        $userHash = $this->setHash($user[0]['id']);
 
         if(!empty($isErrors['errors'])) {
             return $isErrors;
         }
 
-        return ['status' => 'ok', 'user' => $user[0]];
+        return ['status' => 'ok', 'user' => [
+            'id' => $user[0]['id'],
+            'username' => $user[0]['username'],
+            'status_id' => $user[0]['status_id'],
+            'userHash' => $userHash
+            ]
+        ];
+    }
+
+    private function setHash($id) {
+        $hashes = Hasher::outputHashes();
+        $query = "UPDATE users SET hash='{$hashes['dataBaseHash']}' WHERE id=$id";
+        $result = mysqli_query($this->link, $query);
+        return $hashes['userHash'];
     }
 }
