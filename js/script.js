@@ -32,7 +32,7 @@ if(!userData) {
     }
 }
 
-/*SWITCH DIALOGUE*/
+/*SWITCH DIALOGUE*/ //commit
 generalDialogue.onclick = function(event) {
     if(dialogueWindow.classList.contains('hide')) {
         dialogueWindow.classList.remove('hide');
