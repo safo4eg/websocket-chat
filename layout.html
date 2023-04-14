@@ -13,10 +13,15 @@
         <div class="container">
             <div id="chat" class="chat">
                 <div class="left">
-                    <div class="title">Чаты</div>
-                    <div class="dialogues-wrapper">
-
-                        <div class="dialogue">
+                    <div class="top">
+                        <div id="userDialoguesToggle" class="item">Чаты</div>
+                        <div class="actions">
+                            <span id="userSettingsToggle" class="item">Настройки</span>
+                            <span id="logout" class="item">Выход</span>
+                        </div>
+                    </div>
+                    <div id="userDialogues" class="dialogues-wrapper">
+                        <div id="generalDialogue" class="dialogue">
                             <input type="hidden" value="all">
                             <div class="img-wrapper"></div>
                             <div class="info">
@@ -24,29 +29,40 @@
                                 <div class="message">Последнее сообщение</div>
                             </div>
                         </div>
+                    </div> <!-- dialogues-wrapper -->
 
+                    <div id="userSettings" class="settings-wrapper hide">
+                        <div class="item">
+                            <span class="title">Username:</span>
+                            <span id="sUsername"></span>
+                        </div>
                     </div>
                 </div> <!-- chat left -->
 
                 <div class="right">
-                    <div class="top">
-                        <div class="title">Общий</div>
-                    </div>
-
-                    <div class="messages-wrapper" id="messages-wrapper">
-                        <div class="message">
-                            <input type="hidden" value="0"> <!-- уникальный ид который не будет ни у какого пользователя -->
+                    <div id="dialogueWindow" class="dialogue-window hide">
+                        <div class="top">
+                            <div class="title">Общий</div>
                         </div>
 
+                        <div class="messages-wrapper" id="messages-wrapper">
+                            <div class="message">
+                                <input type="hidden" value="0"> <!-- уникальный ид который не будет ни у какого пользователя -->
+                            </div>
 
-                    </div> <!-- message-wrapper -->
+                        </div> <!-- message-wrapper -->
 
-                    <div class="pen">
+                        <div class="pen">
                         <textarea
                                 name="input-message"
                                 id="input-message"
                                 placeholder="Введите сообщение..."
                                 style="height: 20px"></textarea>
+                        </div>
+                    </div>
+
+                    <div id="emptyDialogue" class="empty-dialogue">
+                        <span>Выберите диалог/беседу <br> для начала общения</span>
                     </div>
                 </div> <!-- chat right -->
             </div> <!-- chat -->

@@ -1,32 +1,34 @@
 ;(function() {
     let connectionModule = {};
 
-    connectionModule.startWebsocket = function(socketServer, inputMessage) {
+    connectionModule.sendMessage = function(socket, payload) {
+        let frameText = createStructureFrame(
+            payload['type'],
+            payload['userHash'],
+            payload['message'],
+            payload['dialogue']
+        )
+        socket.send(frameText);
+    }
+
+    connectionModule.startWebsocket = function(socketServer, payload) {
         let socket = new WebSocket(socketServer);
 
-        inputMessage.addEventListener('keypress', function(event) {
-            if(event.code === 'Enter') {
-                let message = this.value;
-                if(message !== '') {
-                    socket.send(message);
-                    this.value = '';
-                }
-            }
-        });
-
         socket.onopen = function(event) {
-            console.log('Соединение установлено');
+            socket.send(createStructureFrame(
+                payload['type'],
+                payload['userHash'],
+                null,
+                payload['dialogue']
+                )
+            );
         };
 
         socket.onerror = function(event) {
             console.log('ошибочка');
         }
 
-        socket.onmessage = function(event) {
-            let message = event.data;
-            interactivityModule.createMessage(messagesWrapper, 2, message, (new Date()).getTime());
-        };
-
+        return socket;
     }
 
     connectionModule.sendAuth = async function(payload, url) {
@@ -43,6 +45,16 @@
 
     connectionModule.getData = function($key) {
         return JSON.parse(localStorage.getItem($key));
+    }
+
+    function createStructureFrame(type, userHash, message=null, dialogue=null) {
+        let obj = {
+            type: type,
+            userHash: userHash
+        }
+        if(message) obj.message = message;
+        if(dialogue !== null) obj.dialogue = dialogue;
+        return JSON.stringify(obj);
     }
 
     window.connectionModule = connectionModule;

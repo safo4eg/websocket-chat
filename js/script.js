@@ -1,13 +1,95 @@
+let socket = null;
 let modal = document.getElementById('modal');
 let chat = document.getElementById('chat');
 let inputMessage = document.getElementById('input-message');
 let messagesWrapper = document.getElementById('messages-wrapper');
+let userSettings = document.getElementById('userSettings');
+let userDialogues = document.getElementById('userDialogues');
 
-if(!connectionModule.getData('user')) {
+let dialogueWindow = document.getElementById('dialogueWindow');
+let emptyDialogue = document.getElementById('emptyDialogue');
+let generalDialogue = document.getElementById('generalDialogue');
+
+/*ACTIONS ELEMS*/
+let userSettingsToggle = document.getElementById('userSettingsToggle');
+let userDialoguesToggle = document.getElementById('userDialoguesToggle');
+let logout = document.getElementById('logout');
+let sUsername = document.getElementById('sUsername');
+
+/*CHECK USER TOKEN AND CURRENT DIALOGUE*/
+let userData = connectionModule.getData('user');
+let currentDialogue = connectionModule.getData('currentDialogue');
+if(!userData) {
     modal.classList.remove('hide');
     chat.classList.add('hide');
 } else {
-    connectionModule.startWebsocket('ws://127.0.0.1:4545', inputMessage);
+    interactivityModule.setSettings(userData, sUsername);
+    if(currentDialogue != null) {
+        if(dialogueWindow.classList.contains('hide')) {
+            dialogueWindow.classList.remove('hide');
+            emptyDialogue.classList.add('hide');
+        }
+    }
+}
+
+/*SWITCH DIALOGUE*/
+generalDialogue.onclick = function(event) {
+    if(dialogueWindow.classList.contains('hide')) {
+        dialogueWindow.classList.remove('hide');
+        emptyDialogue.classList.add('hide');
+        connectionModule.saveData('currentDialogue', JSON.stringify('generalDialogue'));
+        currentDialogue = connectionModule.getData('currentDialogue');
+
+
+        socket = connectionModule.startWebsocket('ws://127.0.0.1:4545', {
+            type: 'connection',
+            userHash: userData['userHash'],
+            dialogue: currentDialogue
+        });
+
+        inputMessage.addEventListener('keypress', function(event) {
+            if(event.code === 'Enter') {
+                let message = this.value;
+                if(message !== '') {
+                    connectionModule.sendMessage(socket,{
+                        type: 'message',
+                        userHash: userData['userHash'],
+                        dialogue: currentDialogue,
+                        message: message
+                    });
+                    this.value = '';
+                }
+            }
+        });
+
+        socket.onmessage = function(event) {
+            console.log('d');
+            interactivityModule.createServerMessage(messagesWrapper, event.data);
+        }
+    }
+}
+
+/*ACTIONS LEFT TOP*/
+userSettingsToggle.onclick = function(event) {
+    if(userSettings.classList.contains('hide')) {
+        userSettings.classList.remove('hide');
+        userDialogues.classList.add('hide');
+    }
+}
+
+userDialoguesToggle.onclick = function(event) {
+    if(userDialogues.classList.contains('hide')) {
+        userDialogues.classList.remove('hide');
+        userSettings.classList.add('hide');
+    }
+}
+
+logout.onclick = function(event) {
+    connectionModule.saveData('user', null);
+    connectionModule.saveData('currentDialogue', null);
+    chat.classList.add('hide');
+    modal.classList.remove('hide');
+    // так же будет диссконнект с вебсокета
 }
 
 /* INTERACTIVITY TEXTAREA */
@@ -46,10 +128,13 @@ if(document.getElementById('modal') !== null) {
             response.text().then(data => {
                 if(response.status === 200) {
                     connectionModule.saveData('user', data);
+                    userData = connectionModule.getData('user');
                     modal.classList.add('hide');
                     chat.classList.remove('hide');
-                    connectionModule.startWebsocket('ws://127.0.0.1:4545', inputMessage);
-                    // коннектимся
+
+                    emptyDialogue.classList.remove('hide');
+                    dialogueWindow.classList.add('hide');
+                    interactivityModule.setSettings(userData, sUsername);
                 } else if(response.status >= 400) {
                     console.log(JSON.parse(data)); // вывод ошибок для форм
                 }

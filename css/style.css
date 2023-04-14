@@ -33,17 +33,51 @@
     flex-basis: 35%;
 }
 
-.chat .left .title {
-    text-transform: capitalize;
-    font-weight: 400;
-    font-size: 20px;
-    color: #dfdfdf;
+.chat .left .top {
     padding: 20px;
+    font-weight: 400;
+    font-size: 16px;
+    color: #dfdfdf;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.chat .left .top .item:hover {
+    cursor: pointer;
+    color: #ee4b10;
+}
+
+.chat .left .top .actions .item:nth-child(n + 2) {
+    margin-left: 10px;
 }
 
 .chat .left .dialogues-wrapper {
     display: flex;
     flex-direction: column;
+}
+
+.chat .left .dialogues-wrapper.hide {
+    display: none;
+}
+
+.chat .left .settings-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 20px 25px 20px;
+}
+
+.chat .left .settings-wrapper.hide {
+    display: none;
+}
+
+.chat .left .settings-wrapper .item {
+    color: #dfdfdf;
+    font-size: 16px;
+}
+
+.chat .left .settings-wrapper .item .title {
+    margin-right: 20px;
 }
 
 .chat .left .dialogue {
@@ -80,9 +114,35 @@
 .chat .right {
     background-color: white;
     flex-basis: 65%;
+    padding: 20px;
+}
+
+.chat .right .empty-dialogue {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chat .right .empty-dialogue.hide {
+    display: none;
+}
+
+.chat .right .empty-dialogue span {
+    font-size: 22px;
+    opacity: 0.8;
+    text-align: center;
+}
+
+.chat .right .dialogue-window {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    padding: 20px;
+}
+
+.chat .right .dialogue-window.hide {
+    display: none;
 }
 
 .chat .right .top {
@@ -101,6 +161,17 @@
 
 .chat .right .message {
     display: flex;
+}
+
+.chat .right .server-message {
+    width: 30%;
+    margin: 10px auto 0 auto;
+    text-align: center;
+}
+
+.chat .right .server-message span {
+    font-size: 16px;
+    color: #108aee;
 }
 
 .chat .right .message:nth-child(n + 3) {
@@ -249,6 +320,7 @@
 .modal-content #auth-form #auth-btn:hover {
     cursor: pointer;
 }
+
 
 /* ВСПОМОГАТЕЛЬНЫЕ КЛАССЫ */
 

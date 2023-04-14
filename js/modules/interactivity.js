@@ -1,6 +1,10 @@
 ;(function() {
     let interactivityModule = {};
 
+    interactivityModule.setSettings = function (userData, sUsername) {
+        sUsername.textContent = userData['username'];
+    }
+
     interactivityModule.textareaChanges = function(event) {
         let height = this.offsetHeight;
         let kf = height/20;
@@ -8,6 +12,22 @@
         let newHeightDown = height - 20;
         if(this.value.length >= kf*66) this.style.height = `${newHeightUp}px`;
         else if(this.value.length < (kf - 1)*66 && kf !== 1) this.style.height = `${newHeightDown}px`;
+    }
+
+    interactivityModule.createServerMessage = function(messagesWrapper, message, id= -1) {
+        let serverMessage = document.createElement('DIV');
+        serverMessage.classList.add('server-message');
+
+        let span = document.createElement('SPAN');
+        span.textContent = message;
+
+        let hiddenInput = document.createElement('INPUT');
+        hiddenInput.type = 'hidden';
+        hiddenInput.value = id;
+
+        serverMessage.append(hiddenInput);
+        serverMessage.append(span);
+        messagesWrapper.append(serverMessage);
     }
 
     interactivityModule.createMessage = function(messagesWrapper, id, message, time) {
