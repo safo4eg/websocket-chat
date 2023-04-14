@@ -32,19 +32,19 @@ if(!userData) {
     }
 }
 
-/*SWITCH DIALOGUE*/ //commit
+/*SWITCH DIALOGUE*/
 generalDialogue.onclick = function(event) {
     if(dialogueWindow.classList.contains('hide')) {
         dialogueWindow.classList.remove('hide');
         emptyDialogue.classList.add('hide');
-        connectionModule.saveData('currentDialogue', JSON.stringify('generalDialogue'));
+        connectionModule.saveData('currentDialogue', JSON.stringify(1));
         currentDialogue = connectionModule.getData('currentDialogue');
 
 
         socket = connectionModule.startWebsocket('ws://127.0.0.1:4545', {
             type: 'connection',
             userHash: userData['userHash'],
-            dialogue: currentDialogue
+            dialogueId: currentDialogue
         });
 
         inputMessage.addEventListener('keypress', function(event) {
@@ -54,7 +54,7 @@ generalDialogue.onclick = function(event) {
                     connectionModule.sendMessage(socket,{
                         type: 'message',
                         userHash: userData['userHash'],
-                        dialogue: currentDialogue,
+                        dialogueId: currentDialogue,
                         message: message
                     });
                     this.value = '';
@@ -63,7 +63,6 @@ generalDialogue.onclick = function(event) {
         });
 
         socket.onmessage = function(event) {
-            console.log('d');
             interactivityModule.createServerMessage(messagesWrapper, event.data);
         }
     }

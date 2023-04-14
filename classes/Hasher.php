@@ -4,11 +4,10 @@ class Hasher {
     private static $serverKey = 'xZzNG6a78fGnDOc0mJECweoVJYbedvSN';
     private static $algo = 'sha256';
 
-    public static function checkUserHash($dataBaseHash, $userHash) {
+    public static function getDataBaseHashByUserHash($userHash) {
         $serverHash = self::hashForServer();
-        $verifiableHash = hash(self::$algo, $serverHash.$userHash); // verifiable(проверяемый)
-        if($verifiableHash === $dataBaseHash) return true;
-        else return false;
+        $dataBaseHash = hash(self::$algo, $serverHash.$userHash);
+        return $dataBaseHash;
     }
 
     public static function outputHashes() {

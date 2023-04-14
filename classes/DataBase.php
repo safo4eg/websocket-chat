@@ -11,6 +11,33 @@ class DataBase {
         }
     }
 
+    public function getUserByHash($userHash) {
+        $isErrors = ['status' => 'errors', 'errors' => []];
+        $dataBaseHashByInputUserHash = Hasher::getDataBaseHashByUserHash($userHash);
+
+        $query = "SELECT * FROM users WHERE hash='$dataBaseHashByInputUserHash'";
+        $result = mysqli_query($this->link, $query);
+        if(!$result) {
+            $isErrors['errors']['mysqli'] = mysqli_error($this->link);
+        }
+        for($user = []; $row = mysqli_fetch_assoc($result); $user[] = $row);
+        if(empty($user)) {
+            $isErrors['errors']['auth'] = 'Ошибка авторизации, выполните вход повторно';
+            return $isErrors;
+        }
+
+        if(!empty($isErrors['errors'])) {
+            return $isErrors;
+        }
+
+        return ['status' => 'ok', 'user' => [
+            'id' => $user[0]['id'],
+            'username' => $user[0]['username'],
+            'status_id' => $user[0]['status_id']
+            ]
+        ];
+    }
+
     public function loginUser($username, $password) {
         $isErrors = ['status' => 'error', 'errors' => []];
 
