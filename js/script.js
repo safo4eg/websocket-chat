@@ -28,6 +28,44 @@ if(!userData) {
         if(dialogueWindow.classList.contains('hide')) {
             dialogueWindow.classList.remove('hide');
             emptyDialogue.classList.add('hide');
+            // коонект к тому диалогу, который записан в локал сторидж при обновление странице или перезаходе на сайт
+            // но при выходе очищается => при входе/регистрации нужно будет выбрать диалог активный заново
+            socket = connectionModule.startWebsocket('ws://127.0.0.1:4545', {
+                type: 'connection',
+                userHash: userData['userHash'],
+                dialogueId: currentDialogue
+            });
+
+            inputMessage.addEventListener('keypress', function(event) {
+                if(event.code === 'Enter') {
+                    let message = this.value;
+                    if(message !== '') {
+                        connectionModule.sendMessage(socket,{
+                            type: 'message',
+                            userHash: userData['userHash'],
+                            dialogueId: currentDialogue,
+                            message: message
+                        });
+                        this.value = '';
+                    }
+                }
+            });
+
+            socket.onmessage = function(event) {
+                let data = JSON.parse(event.data);
+
+                if(data['type'] === 'connection') {
+                    interactivityModule.createServerMessage(messagesWrapper, data['message']);
+                } else if(data['type'] === 'message') {
+                    interactivityModule.createMessage(messagesWrapper,
+                        data['id'],
+                        data['username'],
+                        data['message'],
+                        new Date().getTime()
+                    )
+                    console.log(data);
+                }
+            }
         }
     }
 }
@@ -100,7 +138,7 @@ logout.onclick = function(event) {
     connectionModule.saveData('currentDialogue', null);
     chat.classList.add('hide');
     modal.classList.remove('hide');
-    // так же будет диссконнект с вебсокета
+    if(socket) socket.close();
 }
 
 /* INTERACTIVITY TEXTAREA */

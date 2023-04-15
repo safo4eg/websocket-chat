@@ -109,7 +109,6 @@ while (true) {
                         socket_write($client['connection'], WebSocket::encode(json_encode($response, JSON_UNESCAPED_UNICODE)));
                     }
 
-                    echo "\r\n\r\n\r\n".var_dump($clients)."\r\n";
                     echo "\r\n\r\n\r\n\r\n"."close"."\r\n";
                 }
             }
