@@ -6,7 +6,7 @@
             payload['type'],
             payload['userHash'],
             payload['message'],
-            payload['dialogue']
+            payload['dialogueId']
         )
         socket.send(frameText);
     }
@@ -19,7 +19,7 @@
                 payload['type'],
                 payload['userHash'],
                 null,
-                payload['dialogue']
+                payload['dialogueId']
                 )
             );
         };
@@ -47,13 +47,13 @@
         return JSON.parse(localStorage.getItem($key));
     }
 
-    function createStructureFrame(type, userHash, message=null, dialogue=null) {
+    function createStructureFrame(type, userHash, message=null, dialogueId=null) {
         let obj = {
             type: type,
             userHash: userHash
         }
         if(message) obj.message = message;
-        if(dialogue !== null) obj.dialogue = dialogue;
+        if(dialogueId) obj.dialogueId = dialogueId;
         return JSON.stringify(obj);
     }
 

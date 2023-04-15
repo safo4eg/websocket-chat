@@ -36,29 +36,81 @@ while (true) {
                 $responseHeader = WebSocket::createResponseHeaders($headers);
                 socket_write($connection, $responseHeader);
                 $connections[] = $connection;
-                echo "\r\n".var_dump($connections)."\r\n";
             }
         } else {
             foreach($read as $client_socket) {
-                $payloadJson = WebSocket::decode(socket_read($client_socket, 1024));
-                $payloadObj = json_decode($payloadJson, JSON_UNESCAPED_UNICODE);
-                if($payloadObj['type'] === 'connection') {
+                $frame = socket_read($client_socket, 1024);
+                $frameType = WebSocket::checkPayloadType($frame);
+                if($frameType === 'text') {
+                    $payloadJson = WebSocket::decode($frame);
+                    $payloadObj = json_decode($payloadJson, JSON_UNESCAPED_UNICODE);
                     $userHash = $payloadObj['userHash'];
-                    $result = $db->getUserByHash($userHash);
-                    if($result['status'] !== 'ok') {
-                        echo "\r\n".var_dump($result['errors']);
-                    } else {
-                        $clientInfo = $result['user'];
-                        $clientInfo['dialogueId'] = $payloadObj['dialogueId'];
-                        $clientInfo['connection'] = $client_socket;
-                        $clients[] = $clientInfo;
+                    if($payloadObj['type'] === 'connection') {
+                        $result = $db->getUserByHash($userHash);
+                        if($result['status'] !== 'ok') {
+                            echo "\r\n".var_dump($result['errors']);
+                        } else {
+                            $clientInfo = $result['user'];
+                            $clientInfo['dialogueId'] = $payloadObj['dialogueId'];
+                            $clientInfo['hash'] = $userHash;
+                            $clientInfo['connection'] = $client_socket;
+                            $clients[] = $clientInfo;
+
+                            $response = [
+                                'type' => 'connection',
+                                'message' => "{$clientInfo['username']} присоединился"
+                            ];
+
+                            foreach($clients as $client) {
+                                socket_write($client['connection'], WebSocket::encode(json_encode($response, JSON_UNESCAPED_UNICODE)));
+                            }
+
+                            echo "\r\n".var_dump($clients)."\r\n";
+                        }
+                    } elseif($payloadObj['type'] === 'message') {
+                        $response = [
+                            'type' => 'message',
+                            'username' => null,
+                            'id' => null,
+                            'message' => $payloadObj['message']
+                        ];
 
                         foreach($clients as $client) {
-                            socket_write($client['connection'], WebSocket::encode("{$clientInfo['username']} присоединился"));
+                            if($client['hash'] = $userHash) {
+                                $response['username'] = $client['username'];
+                                $response['id'] = $client['id'];
+                            }
+                        }
+
+                        foreach($clients as $client) {
+                            socket_write($client['connection'], WebSocket::encode(json_encode($response, JSON_UNESCAPED_UNICODE)));
+                        }
+
+                    } else {
+                        echo "\r\n"."other"."\r\n";
+                    }
+                } elseif($frameType === 'close') {
+                    $response = [
+                        'type' => 'connection',
+                        'message' => null
+                    ];
+
+                    $connectionKey = array_search($client_socket, $connections);
+                    unset($connections[$connectionKey]);
+
+                    foreach($clients as $key => $client) {
+                        if($client['connection'] == $client_socket) {
+                            $response['message'] = "{$client['username']} отключился";
+                            unset($clients[$key]);
                         }
                     }
-                } else {
-                    echo "\r\nno-connection\r\n";
+
+                    foreach($clients as $client) {
+                        socket_write($client['connection'], WebSocket::encode(json_encode($response, JSON_UNESCAPED_UNICODE)));
+                    }
+
+                    echo "\r\n\r\n\r\n".var_dump($clients)."\r\n";
+                    echo "\r\n\r\n\r\n\r\n"."close"."\r\n";
                 }
             }
         }

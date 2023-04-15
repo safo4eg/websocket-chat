@@ -63,7 +63,19 @@ generalDialogue.onclick = function(event) {
         });
 
         socket.onmessage = function(event) {
-            interactivityModule.createServerMessage(messagesWrapper, event.data);
+            let data = JSON.parse(event.data);
+
+            if(data['type'] === 'connection') {
+                interactivityModule.createServerMessage(messagesWrapper, data['message']);
+            } else if(data['type'] === 'message') {
+                interactivityModule.createMessage(messagesWrapper,
+                    data['id'],
+                    data['username'],
+                    data['message'],
+                    new Date().getTime()
+                )
+                console.log(data);
+            }
         }
     }
 }

@@ -30,7 +30,7 @@
         messagesWrapper.append(serverMessage);
     }
 
-    interactivityModule.createMessage = function(messagesWrapper, id, message, time) {
+    interactivityModule.createMessage = function(messagesWrapper,id,  username, message, time) {
         let lastMessage = messagesWrapper.lastElementChild;
         let lastUserId = +lastMessage.querySelector("input[type='hidden']").value;
         let newMessage = document.createElement('DIV');
@@ -48,7 +48,6 @@
         let text = document.createElement('DIV');
         text.classList.add('text');
         text.textContent = message;
-        textWrapper.append(text);
 
         let timeBlock = document.createElement('DIV');
         timeBlock.classList.add('item');
@@ -62,10 +61,18 @@
             imgWrapper.classList.add('item');
             imgWrapper.classList.add('img-wrapper');
 
+            let mUsername = document.createElement('DIV');
+            mUsername.textContent = username;
+            mUsername.id = 'mUsername';
+            textWrapper.append(mUsername);
+            let div = document.createElement('DIV');
+            textWrapper.append(div);
+
             newMessage.append(imgWrapper);
             newMessage.classList.remove('same-user');
         }
 
+        textWrapper.append(text);
         newMessage.append(textWrapper);
         newMessage.append(timeBlock);
 

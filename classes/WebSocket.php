@@ -1,6 +1,20 @@
 <?php
 
 class WebSocket {
+
+    public static function checkPayloadType($frame) {
+        $typeInDec = ['close' => 8, 'text' => 1];
+
+        $firstByteToBits = sprintf('%08b', ord($frame[0]));
+        $opcodeInDec = bindec(substr($firstByteToBits, 4));
+
+        foreach($typeInDec as $key => $value) {
+            if($value === $opcodeInDec) {
+                return $key;
+            }
+        }
+    }
+
     public static function encode($text) {
         $frameStart = [];
         $payloadLength = strlen($text);
