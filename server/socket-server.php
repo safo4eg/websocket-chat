@@ -1,5 +1,5 @@
 <?php
-
+include_once 'includes/start.php';
 require_once('classes/WebSocket.php');
 require_once('classes/DataBase.php');
 
@@ -10,7 +10,6 @@ $connections = [];
 $clients = [];
 $max_connections = 3;
 $master = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-$db = new DataBase('chat', 'root', '', 'chat');
 
 if (!socket_bind($master, '127.0.0.1', 4545)) {
     echo 'Сокет не привязан. Причина: ' . socket_strerror(socket_last_error());
