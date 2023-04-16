@@ -1,11 +1,7 @@
 <?php
-
-
-    include_once '../includes/start.php';
     require_once('../classes/DataBase.php');
-
+    include_once '../includes/start.php';
     if(!empty($_POST)) {
-        $db = new DataBase('chat', 'root', '', 'chat');
         $response = [];
 
         if(in_array('', $_POST)) {

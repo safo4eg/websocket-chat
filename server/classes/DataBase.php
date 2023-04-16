@@ -1,5 +1,4 @@
 <?php
-
 require_once('Hasher.php');
 class DataBase
 {

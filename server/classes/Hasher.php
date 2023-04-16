@@ -1,8 +1,5 @@
 <?php
-
-namespace classes;
-class Hasher
-{
+class Hasher {
     private static $serverKey = 'xZzNG6a78fGnDOc0mJECweoVJYbedvSN';
     private static $algo = 'sha256';
 

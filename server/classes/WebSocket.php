@@ -1,9 +1,6 @@
 <?php
-
-namespace classes;
 class WebSocket
 {
-
     public static function checkPayloadType($frame)
     {
         $typeInDec = ['close' => 8, 'text' => 1];

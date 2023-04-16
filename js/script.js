@@ -199,7 +199,7 @@ if(document.getElementById('modal') !== null) {
         event.preventDefault();
         let action = authForm.querySelector('#auth-action').value;
         let formData = new FormData(authForm);
-        connectionModule.sendAuth(formData, 'handlers/auth.php').then(response => {
+        connectionModule.sendAuth(formData, '/server/handlers/auth.php').then(response => {
             response.text().then(data => {
                 if(response.status === 200) {
                     connectionModule.saveData('user', data);

@@ -1,7 +1,7 @@
 <?php
-include_once 'includes/start.php';
-require_once('classes/WebSocket.php');
 require_once('classes/DataBase.php');
+require_once('classes/WebSocket.php');
+include_once 'includes/start.php';
 
 set_time_limit(0);
 
