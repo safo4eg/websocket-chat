@@ -55,6 +55,19 @@ if(!userData) {
                 let data = JSON.parse(event.data);
 
                 if(data['type'] === 'connection') {
+                    let pastMessages = data['pastMessages'];
+                    if(pastMessages) {
+                        pastMessages.forEach((elem) => {
+                            interactivityModule.createMessage(
+                                messagesWrapper,
+                                elem['id'],
+                                elem['username'],
+                                elem['message'],
+                                +(elem['timestamp'] + '000')
+                            );
+                        });
+                    }
+
                     interactivityModule.createServerMessage(messagesWrapper, data['message']);
                 } else if(data['type'] === 'message') {
                     interactivityModule.createMessage(messagesWrapper,
@@ -104,7 +117,20 @@ generalDialogue.onclick = function(event) {
             let data = JSON.parse(event.data);
 
             if(data['type'] === 'connection') {
-                interactivityModule.createServerMessage(messagesWrapper, data['message']);
+                let pastMessages = data['pastMessages'];
+                if(pastMessages) {
+                    pastMessages.forEach((elem) => {
+                        interactivityModule.createMessage(
+                            messagesWrapper,
+                            elem['id'],
+                            elem['username'],
+                            elem['message'],
+                            +(elem['timestamp'] + '000')
+                        );
+                    });
+                } else {
+                    interactivityModule.createServerMessage(messagesWrapper, data['message']);
+                }
             } else if(data['type'] === 'message') {
                 interactivityModule.createMessage(messagesWrapper,
                     data['id'],

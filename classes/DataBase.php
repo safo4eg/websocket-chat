@@ -11,6 +11,24 @@ class DataBase {
         }
     }
 
+    public function getMessages($dialogueId) {
+        $query = "SELECT m.message, UNIX_TIMESTAMP(m.timestamp) as timestamp, u.id, u.username, u.status_id FROM messages as m
+                    INNER JOIN users as u ON u.id=m.user_id
+                    WHERE m.dialogue_id=$dialogueId
+                 ";
+
+        $res = mysqli_query($this->link, $query);
+        for($messageInfo = []; $row = mysqli_fetch_assoc($res); $messageInfo[] = $row);
+        return $messageInfo;
+    }
+
+    public function addMessage($userId, $dialogueId, $message) {
+        $timestamp = time();
+        $query = "INSERT INTO messages 
+                    SET user_id=$userId, dialogue_id=$dialogueId, message='$message', timestamp=FROM_UNIXTIME($timestamp)";
+        $res = mysqli_query($this->link, $query);
+    }
+
     public function getUserByHash($userHash) {
         $isErrors = ['status' => 'errors', 'errors' => []];
         $dataBaseHashByInputUserHash = Hasher::getDataBaseHashByUserHash($userHash);

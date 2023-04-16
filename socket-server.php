@@ -45,6 +45,7 @@ while (true) {
                     $payloadJson = WebSocket::decode($frame);
                     $payloadObj = json_decode($payloadJson, JSON_UNESCAPED_UNICODE);
                     $userHash = $payloadObj['userHash'];
+                    $dialogueId = $payloadObj['dialogueId'];
                     if($payloadObj['type'] === 'connection') {
                         $result = $db->getUserByHash($userHash);
                         if($result['status'] !== 'ok') {
@@ -58,21 +59,27 @@ while (true) {
 
                             $response = [
                                 'type' => 'connection',
-                                'message' => "{$clientInfo['username']} присоединился"
+                                'message' => null,
+                                'pastMessages' => null
                             ];
 
+                            $response['pastMessages'] = $db->getMessages($dialogueId);
+                            socket_write($client_socket, WebSocket::encode(json_encode($response, JSON_UNESCAPED_UNICODE)));
+                            unset($response['pastMessages']);
+
+                            $response['message'] = "{$clientInfo['username']} присоединился";
                             foreach($clients as $client) {
                                 socket_write($client['connection'], WebSocket::encode(json_encode($response, JSON_UNESCAPED_UNICODE)));
                             }
-
-                            echo "\r\n".var_dump($clients)."\r\n";
                         }
                     } elseif($payloadObj['type'] === 'message') {
+                        $message = $payloadObj['message'];
+
                         $response = [
                             'type' => 'message',
                             'username' => null,
                             'id' => null,
-                            'message' => $payloadObj['message']
+                            'message' => $message
                         ];
 
                         foreach($clients as $client) {
@@ -81,6 +88,8 @@ while (true) {
                                 $response['id'] = $client['id'];
                             }
                         }
+
+                        $db->addMessage($response['id'], $dialogueId, $message);
 
                         foreach($clients as $client) {
                             socket_write($client['connection'], WebSocket::encode(json_encode($response, JSON_UNESCAPED_UNICODE)));

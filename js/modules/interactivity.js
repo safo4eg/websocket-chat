@@ -28,6 +28,8 @@
         serverMessage.append(hiddenInput);
         serverMessage.append(span);
         messagesWrapper.append(serverMessage);
+
+        messagesWrapper.scrollTo(0, messagesWrapper.scrollHeight); // скролл ввниз
     }
 
     interactivityModule.createMessage = function(messagesWrapper,id,  username, message, time) {
@@ -77,6 +79,7 @@
         newMessage.append(timeBlock);
 
         messagesWrapper.append(newMessage);
+        messagesWrapper.scrollTo(0, messagesWrapper.scrollHeight); // скролл вниз
     }
 
 

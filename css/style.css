@@ -153,6 +153,8 @@
 }
 
 .chat .right .messages-wrapper {
+    overflow: scroll;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     flex-basis: 80%;
@@ -161,25 +163,18 @@
 
 .chat .right .message {
     display: flex;
+    margin-bottom: 5px;
 }
 
 .chat .right .server-message {
     width: 30%;
-    margin: 10px auto 0 auto;
+    margin: 0px auto 10px auto;
     text-align: center;
 }
 
 .chat .right .server-message span {
     font-size: 16px;
     color: #108aee;
-}
-
-.chat .right .message:nth-child(n + 3) {
-    margin-top: 20px;
-}
-
-.chat .right .message.same-user {
-    margin-top: 5px;
 }
 
 .chat .right .message .item:nth-child(n + 2) {
